@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- THIS LIST IS NOW UPDATED WITH YOUR PINCODE ---
+    // --- YOUR SERVICEABLE PIN CODES ---
     const serviceablePinCodes = ["400080"]; 
 
     // --- YOUR GOOGLE SHEET URL ---
     const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCBq0sGvaMLJI-dylG7325ZFZ4cx6zC0ud4hrbIAbflYy4J7I5wpO_sDkIvmu1cziVbjyM5u_Nk5Yv/pub?output=csv';
     
-    // --- Getting HTML containers ---
     const productInfoContainer = document.getElementById('product-info-container');
     const pincodeContainer = document.getElementById('pincode-section-container');
     const storesContainer = document.getElementById('stores-container');
@@ -15,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!productIDFromURL) {
         productInfoContainer.innerHTML = '<h1>Product Not Found</h1><p>Please use a valid product link.</p>';
-        return; // Stop the script if no product ID is in the URL
+        return; 
     }
 
     fetch(googleSheetURL)
@@ -25,9 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const product = allProducts.find(p => p.productID === productIDFromURL);
 
             if (product) {
-                // --- If we found the product, build the page ---
-                
-                // 1. Render the main image and title
                 productInfoContainer.innerHTML = `
                     <div class="product-header">
                         <img src="${product.imageURL}" alt="${product.productName}">
@@ -35,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
 
-                // 2. Prepare the store data
                 const marketplaces = [
                     { name: 'Amazon', link: product.amazonLink, price: parseFloat(product.amazonPrice), type: 'standard' },
                     { name: 'Flipkart', link: product.flipkartLink, price: parseFloat(product.flipkartPrice), type: 'standard' },
@@ -46,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const standardStores = marketplaces.filter(s => s.type === 'standard');
                 const instantStores = marketplaces.filter(s => s.type === 'instant');
 
-                // 3. Render the Pincode checker IF there are instant stores
                 if (instantStores.length > 0) {
                     pincodeContainer.innerHTML = `
                         <div class="pincode-checker">
@@ -58,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div id="instant-delivery-options"></div>
                         </div>
                     `;
-                    // Make the button work
                     document.getElementById('pincode-check-btn').addEventListener('click', function() {
                         const enteredPinCode = document.getElementById('pincode-input').value;
                         const optionsContainer = document.getElementById('instant-delivery-options');
@@ -70,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 }
 
-                // 4. Render the standard stores list
                 if (standardStores.length > 0) {
                     let bestPrice = Math.min(...standardStores.map(s => s.price));
                     storesContainer.innerHTML = `
@@ -80,25 +72,37 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     `;
                 }
-
             } else {
-                productInfoContainer.innerHTML = '<h1>Product Not Found</h1><p>The product ID in the link is invalid.</p>';
+                productInfoContainer.innerHTML = '<h1>Product Not Found</h1>';
             }
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            productInfoContainer.innerHTML = '<h1>Error</h1><p>Could not load product data.</p>';
+            productInfoContainer.innerHTML = '<h1>Error</h1>';
         });
 });
 
 function createStoreLink(store, isBestPrice) {
+    // --- THIS IS THE LOGO DATABASE WITH YOUR CORRECTED DROPBOX LINKS ---
+    const logos = {
+        'amazon': 'https://www.dropbox.com/scl/fi/o2fycxwfcynwvswmae1hn/Amazon.png?rlkey=w22zgjc3t4eorbp9k2xaau8om&raw=1',
+        'blinkit': 'https://www.dropbox.com/scl/fi/djkcf42owax1madv7wnif/Blinkit.png?rlkey=uotoh3i916axki7aa2hrubu8y&raw=1',
+        'flipkart': 'https://www.dropbox.com/scl/fi/lmjhlgrfy7fb7p4oajcb7/Flipkart.png?rlkey=e59789wt1q3snvk8llnwryjmg&raw=1',
+        'zepto': 'https://www.dropbox.com/scl/fi/63t2x65lt99qjwaudlwp0/Zepto.png?rlkey=jau6a9kfzea9iwdatv0rvta2t&raw=1'
+    };
+    
+    const logoUrl = logos[store.name.toLowerCase()] || ''; 
+
     const bestPriceBadge = isBestPrice ? '<div class="best-price-badge">BEST PRICE</div>' : '';
     const bestPriceClass = isBestPrice ? 'best-price' : '';
     return `
         <div class="store-link ${bestPriceClass}">
             <div class="store-info">
-                <span class="store-name">${store.name}</span>
-                ${bestPriceBadge}
+                <img src="${logoUrl}" alt="${store.name} Logo" class="store-logo">
+                <div class="store-details">
+                    <span class="store-name">${store.name}</span>
+                    ${bestPriceBadge}
+                </div>
             </div>
             <div class="price-buy-section">
                 <span class="price">₹${store.price.toLocaleString('en-IN')}</span>
