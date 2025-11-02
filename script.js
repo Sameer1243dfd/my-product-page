@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- STEP 1: EDIT THIS LIST WITH YOUR REAL, SERVICEABLE PIN CODES ---
-    const serviceablePinCodes = ["400001", "400002", "110001", "110021", "560001"]; 
+    // --- THIS LIST IS NOW UPDATED WITH YOUR PINCODE ---
+    const serviceablePinCodes = ["400080"]; 
 
-    // --- STEP 2: MAKE SURE THIS GOOGLE SHEET URL IS YOUR FINAL, CORRECT ONE ---
+    // --- YOUR GOOGLE SHEET URL ---
     const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCBq0sGvaMLJI-dylG7325ZFZ4cx6zC0ud4hrbIAbflYy4J7I5wpO_sDkIvmu1cziVbjyM5u_Nk5Yv/pub?output=csv';
     
     // --- Getting HTML containers ---
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="pincode-checker">
                             <div class="header">Check for Instant Delivery</div>
                             <div class="pincode-input-group">
-                                <input type="text" id="pincode-input" placeholder="Enter your pin code" maxlength="6">
+                                <input type="text" id="pincode-input" placeholder="Enter Pincode" maxlength="6">
                                 <button id="pincode-check-btn">Check</button>
                             </div>
                             <div id="instant-delivery-options"></div>
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (serviceablePinCodes.includes(enteredPinCode)) {
                             optionsContainer.innerHTML = instantStores.map(store => createStoreLink(store, false)).join('');
                         } else {
-                            optionsContainer.innerHTML = '<p class="availability-message">Sorry, instant delivery is not available here.</p>';
+                            optionsContainer.innerHTML = '<p class="availability-message">Instant delivery not available here.</p>';
                         }
                     });
                 }
@@ -92,13 +92,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function createStoreLink(store, isBestPrice) {
-    const bestPriceBadge = isBestPrice ? '<span class="best-price-badge">BEST PRICE</span>' : '';
+    const bestPriceBadge = isBestPrice ? '<div class="best-price-badge">BEST PRICE</div>' : '';
     const bestPriceClass = isBestPrice ? 'best-price' : '';
     return `
         <div class="store-link ${bestPriceClass}">
-            <span class="store-name">${store.name} ${bestPriceBadge}</span>
-            <span class="price">₹${store.price.toLocaleString('en-IN')}</span>
-            <a href="${store.link}" target="_blank" class="buy-button">Buy Now →</a>
+            <div class="store-info">
+                <span class="store-name">${store.name}</span>
+                ${bestPriceBadge}
+            </div>
+            <div class="price-buy-section">
+                <span class="price">₹${store.price.toLocaleString('en-IN')}</span>
+                <a href="${store.link}" target="_blank" class="buy-button">Buy Now →</a>
+            </div>
         </div>
     `;
 }
