@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
             productContainer.innerHTML = '';
             const products = csvToObjects(csvText);
 
+            // THIS IS THE NEW LINE FOR DEBUGGING
+            console.log(products);
+
             products.forEach(product => {
                 const productCard = document.createElement('div');
                 productCard.style.border = '1px solid #ccc';
@@ -31,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     innerHTML += `<tr><td>Flipkart</td><td>₹${product.flipkartPrice}</td><td><a href="${product.flipkartLink}?utm_source=product_page" target="_blank">Buy Now</a></td></tr>`;
                 }
                 if (product.zeptoLink && product.zeptoPrice) {
-                    innerHTML += `<tr><td>Zepto</td><td>₹${product.zeptoPrice}</td><td><a href="${product.zeptoLink}?utm_source=product_page" target="_blank">Buy Now</a></td></tr>`;
+                    innerHTML += `<tr><td>Zepto</td><td>₹${product.zeapoPrice}</td><td><a href="${product.zeptoLink}?utm_source=product_page" target="_blank">Buy Now</a></td></tr>`;
                 }
                  if (product.blinkitLink && product.blinkitPrice) {
                     innerHTML += `<tr><td>Blinkit</td><td>₹${product.blinkitPrice}</td><td><a href="${product.blinkitLink}?utm_source=product_page" target="_blank">Buy Now</a></td></tr>`;
