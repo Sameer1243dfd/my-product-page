@@ -74,31 +74,18 @@ body {
     border-radius: 12px;
     padding: 12px;
     margin-bottom: 12px;
+    position: relative; /* This is needed for the badge positioning */
 }
-.store-link.best-price { border: 2px solid #28a745; }
+.store-link.best-price { 
+    border: 2px solid #28a745; 
+    margin-top: 20px; /* Add space for the badge */
+}
 
-.store-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.store-logo {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-}
-.store-name-section {
-    display: flex;
-    flex-direction: column; /* Stacks name and badge */
-    align-items: flex-start; /* Aligns items to the left */
-}
+.store-info { display: flex; align-items: center; gap: 10px; }
+.store-logo { width: 28px; height: 28px; object-fit: contain; }
 .store-name { font-weight: 600; font-size: 1.1em; }
 
-.price-buy-section {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
+.price-buy-section { display: flex; align-items: center; gap: 16px; }
 .price { font-size: 1.2em; font-weight: 600; }
 
 .buy-button {
@@ -109,6 +96,9 @@ body {
     font-weight: 600;
     white-space: nowrap;
     transition: background-color 0.2s ease, transform 0.1s ease;
+    /* --- NEW: Removes the blue highlight on click --- */
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 .buy-button:active { transform: scale(0.98); }
 
@@ -117,12 +107,20 @@ body {
 .btn-blue:hover { background-color: #0056b3; }
 .btn-dark:hover { background-color: #000000; }
 
+/* --- NEW: Correct "Best Price" Badge Positioning --- */
 .best-price-badge {
     background-color: #28a745;
     color: white;
-    font-size: 0.7em;
+    font-size: 0.8em;
     font-weight: bold;
-    padding: 3px 8px;
-    border-radius: 6px;
-    margin-top: 4px;
+    padding: 4px 12px;
+    border-radius: 16px;
+    /* Positioning magic */
+    position: absolute;
+    top: -15px; /* Lifts the badge up */
+    left: 20px; /* Moves it in from the left */
+    display: none; /* Hidden by default */
+}
+.store-link.best-price .best-price-badge {
+    display: block; /* Only show it on the best price item */
 }
