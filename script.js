@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const productIDFromURL = urlParams.get('product');
 
     if (!productIDFromURL) {
-        productInfoContainer.innerHTML = '<h1>Product Not Found</h1><p>Please use a valid product link.</p>';
+        productInfoContainer.innerHTML = '<h1>Product Not Found</h1>';
         return; 
     }
 
@@ -31,11 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
 
+                // --- UPDATED to include button colors ---
                 const marketplaces = [
-                    { name: 'Amazon', link: product.amazonLink, price: parseFloat(product.amazonPrice), type: 'standard' },
-                    { name: 'Flipkart', link: product.flipkartLink, price: parseFloat(product.flipkartPrice), type: 'standard' },
-                    { name: 'Zepto', link: product.zeptoLink, price: parseFloat(product.zeptoPrice), type: 'instant' },
-                    { name: 'Blinkit', link: product.blinkitLink, price: parseFloat(product.blinkitPrice), type: 'instant' }
+                    { name: 'Amazon', link: product.amazonLink, price: parseFloat(product.amazonPrice), type: 'standard', color: 'dark' },
+                    { name: 'Flipkart', link: product.flipkartLink, price: parseFloat(product.flipkartPrice), type: 'standard', color: 'dark' },
+                    { name: 'Zepto', link: product.zeptoLink, price: parseFloat(product.zeptoPrice), type: 'instant', color: 'blue' },
+                    { name: 'Blinkit', link: product.blinkitLink, price: parseFloat(product.blinkitPrice), type: 'instant', color: 'dark' }
                 ].filter(store => store.link && !isNaN(store.price));
 
                 const standardStores = marketplaces.filter(s => s.type === 'standard');
@@ -82,8 +83,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
+// --- THIS FUNCTION IS NOW UPDATED FOR THE NEW ROW LAYOUT ---
 function createStoreLink(store, isBestPrice) {
-    // --- THIS IS THE LOGO DATABASE WITH YOUR CORRECTED DROPBOX LINKS ---
     const logos = {
         'amazon': 'https://www.dropbox.com/scl/fi/o2fycxwfcynwvswmae1hn/Amazon.png?rlkey=w22zgjc3t4eorbp9k2xaau8om&raw=1',
         'blinkit': 'https://www.dropbox.com/scl/fi/djkcf42owax1madv7wnif/Blinkit.png?rlkey=uotoh3i916axki7aa2hrubu8y&raw=1',
@@ -93,20 +94,19 @@ function createStoreLink(store, isBestPrice) {
     
     const logoUrl = logos[store.name.toLowerCase()] || ''; 
 
-    const bestPriceBadge = isBestPrice ? '<div class="best-price-badge">BEST PRICE</div>' : '';
+    const bestPriceBadge = isBestPrice ? '<span class="best-price-badge">BEST PRICE</span>' : '';
     const bestPriceClass = isBestPrice ? 'best-price' : '';
+    const buttonColorClass = store.color === 'blue' ? 'btn-blue' : 'btn-dark';
+
     return `
         <div class="store-link ${bestPriceClass}">
             <div class="store-info">
                 <img src="${logoUrl}" alt="${store.name} Logo" class="store-logo">
-                <div class="store-details">
-                    <span class="store-name">${store.name}</span>
-                    ${bestPriceBadge}
-                </div>
+                <span class="store-name">${store.name} ${bestPriceBadge}</span>
             </div>
             <div class="price-buy-section">
                 <span class="price">₹${store.price.toLocaleString('en-IN')}</span>
-                <a href="${store.link}" target="_blank" class="buy-button">Buy Now →</a>
+                <a href="${store.link}" target="_blank" class="buy-button ${buttonColorClass}">Buy Now →</a>
             </div>
         </div>
     `;
