@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
 
-                // --- UPDATED to include button colors ---
                 const marketplaces = [
                     { name: 'Amazon', link: product.amazonLink, price: parseFloat(product.amazonPrice), type: 'standard', color: 'dark' },
                     { name: 'Flipkart', link: product.flipkartLink, price: parseFloat(product.flipkartPrice), type: 'standard', color: 'dark' },
@@ -83,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// --- THIS FUNCTION IS NOW UPDATED FOR THE NEW ROW LAYOUT ---
+// --- THIS FUNCTION NOW BUILDS THE CORRECT HTML FOR THE NEW CSS ---
 function createStoreLink(store, isBestPrice) {
     const logos = {
         'amazon': 'https://www.dropbox.com/scl/fi/o2fycxwfcynwvswmae1hn/Amazon.png?rlkey=w22zgjc3t4eorbp9k2xaau8om&raw=1',
@@ -93,8 +92,7 @@ function createStoreLink(store, isBestPrice) {
     };
     
     const logoUrl = logos[store.name.toLowerCase()] || ''; 
-
-    const bestPriceBadge = isBestPrice ? '<span class="best-price-badge">BEST PRICE</span>' : '';
+    const bestPriceBadge = isBestPrice ? '<div class="best-price-badge">BEST PRICE</div>' : '';
     const bestPriceClass = isBestPrice ? 'best-price' : '';
     const buttonColorClass = store.color === 'blue' ? 'btn-blue' : 'btn-dark';
 
@@ -102,7 +100,10 @@ function createStoreLink(store, isBestPrice) {
         <div class="store-link ${bestPriceClass}">
             <div class="store-info">
                 <img src="${logoUrl}" alt="${store.name} Logo" class="store-logo">
-                <span class="store-name">${store.name} ${bestPriceBadge}</span>
+                <div class="store-name-section">
+                    <span class="store-name">${store.name}</span>
+                    ${bestPriceBadge}
+                </div>
             </div>
             <div class="price-buy-section">
                 <span class="price">₹${store.price.toLocaleString('en-IN')}</span>
