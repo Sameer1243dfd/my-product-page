@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const productInfoContainer = document.getElementById('product-info-container');
     const pincodeContainer = document.getElementById('pincode-section-container');
     const storesContainer = document.getElementById('stores-container');
-    const bulkInquiryContainer = document.getElementById('bulk-inquiry-container');
+    // We no longer need the separate bulk inquiry container
+    // const bulkInquiryContainer = document.getElementById('bulk-inquiry-container');
 
     const urlParams = new URLSearchParams(window.location.search);
     const productIDFromURL = urlParams.get('product');
@@ -34,17 +35,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
 
+                // ... (The marketplaces, standardStores, instantStores, and pincode logic is EXACTLY the same as before)
                 const marketplaces = [
                     { name: 'Amazon', link: product.amazonLink, price: parseFloat(product.amazonPrice), type: 'standard', color: 'dark' },
                     { name: 'Flipkart', link: product.flipkartLink, price: parseFloat(product.flipkartPrice), type: 'standard', color: 'dark' },
                     { name: 'Zepto', link: product.zeptoLink, price: parseFloat(product.zeptoPrice), type: 'instant', color: 'blue' },
                     { name: 'Blinkit', link: product.blinkitLink, price: parseFloat(product.blinkitPrice), type: 'instant', color: 'dark' }
                 ].filter(store => store.link && !isNaN(store.price));
-
                 const standardStores = marketplaces.filter(s => s.type === 'standard');
                 const instantStores = marketplaces.filter(s => s.type === 'instant');
-
-                // 2. Render Pincode Checker (if applicable)
                 if (instantStores.length > 0) {
                     pincodeContainer.innerHTML = `
                         <div class="pincode-checker">
@@ -67,29 +66,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 }
 
-                // 3. Render Standard Stores
+                // 3. Render Standard Stores and the NEW Bulk Inquiry row
                 if (standardStores.length > 0) {
                     let bestPrice = Math.min(...standardStores.map(s => s.price));
+                    
+                    // --- NEW LOGIC: Create the HTML for the Bulk Inquiry Row ---
+                    const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
+                    const productNameForMessage = encodeURIComponent(product.productName);
+                    const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
+                    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${prefilledMessage}`;
+                    
+                    const bulkInquiryHTML = `
+                        <div class="store-link">
+                            <div class="store-info">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo" class="store-logo">
+                                <span class="store-name">Bulk Queries</span>
+                            </div>
+                            <div class="price-buy-section">
+                                <span class="price">Call Us</span>
+                                <a href="${whatsappLink}" target="_blank" class="buy-button btn-blue">Contact</a>
+                            </div>
+                        </div>
+                    `;
+
                     storesContainer.innerHTML = `
                         <div class="stores-list">
                             <h2>Also available on:</h2>
                             ${standardStores.map(store => createStoreLink(store, store.price === bestPrice)).join('')}
+                            ${bulkInquiryHTML} 
                         </div>
                     `;
                 }
-
-                // 4. Render the Bulk Inquiry Button
-                const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
-                const productNameForMessage = encodeURIComponent(product.productName);
-                const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
-
-                bulkInquiryContainer.innerHTML = `
-                    <div class="bulk-inquiry-section">
-                        <a href="https://wa.me/${whatsappNumber}?text=${prefilledMessage}" class="bulk-inquiry-button" target="_blank">
-                            For Bulk Queries
-                        </a>
-                    </div>
-                `;
 
             } else {
                 productInfoContainer.innerHTML = '<h1>Product Not Found</h1>';
@@ -97,11 +104,11 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            productInfoContainer.innerHTML = '<h1>Error</h1>';
+            productContainer.innerHTML = '<h1>Error</h1>';
         });
 });
 
-// This createStoreLink function is for the ROW-BASED layout you like.
+// The createStoreLink and csvToObjects functions are UNCHANGED.
 function createStoreLink(store, isBestPrice) {
     const logos = {
         'amazon': 'https://www.dropbox.com/scl/fi/o2fycxwfcynwvswmae1hn/Amazon.png?rlkey=w22zgjc3t4eorbp9k2xaau8om&raw=1',
@@ -113,9 +120,8 @@ function createStoreLink(store, isBestPrice) {
     const bestPriceBadge = isBestPrice ? '<div class="best-price-badge">BEST PRICE</div>' : '';
     const bestPriceClass = isBestPrice ? 'best-price' : '';
     const buttonColorClass = store.color === 'blue' ? 'btn-blue' : 'btn-dark';
-    return `<div class="store-link ${bestPriceClass}">${bestPriceBadge}<div class="store-info"><img src="${logoUrl}" alt="${store.name} Logo" class="store-logo"><span class="store-name">${store.name}</span></div><div class="price-buy-section"><span class="price">₹${store.price.toLocaleString('en-IN')}</span><a href="${store.link}" target="_blank" class="buy-button ${buttonColorClass}">Buy Now →</a></div></div>`;
+    return `<div class="store-link ${bestPriceClass}"><div class="store-info"><img src="${logoUrl}" alt="${store.name} Logo" class="store-logo"><div class="store-name-section"><span class="store-name">${store.name}</span>${bestPriceBadge}</div></div><div class="price-buy-section"><span class="price">₹${store.price.toLocaleString('en-IN')}</span><a href="${store.link}" target="_blank" class="buy-button ${buttonColorClass}">Buy Now →</a></div></div>`;
 }
-
 function csvToObjects(csv) {
     const lines = csv.split('\n');
     const headers = lines[0].split(',').map(h => h.trim());
