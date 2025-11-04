@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- YOUR GOOGLE SHEET URL ---
     const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCBq0sGvaMLJI-dylG7325ZFZ4cx6zC0ud4hrbIAbflYy4J7I5wpO_sDkIvmu1cziVbjyM5u_Nk5Yv/pub?output=csv';
     
+    // --- Getting HTML containers ---
     const productInfoContainer = document.getElementById('product-info-container');
     const pincodeContainer = document.getElementById('pincode-section-container');
     const storesContainer = document.getElementById('stores-container');
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     storesContainer.innerHTML = `<div class="stores-list"><h2>Also available on:</h2>${standardStores.map(store => createStoreLink(store, store.price === bestPrice)).join('')}</div>`;
                 }
 
-                // --- UPDATED: The title and subtitle have been removed ---
+                // --- UPDATED: The <h3>WhatsApp</h3> title has been removed ---
                 const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
                 const productNameForMessage = encodeURIComponent(product.productName);
                 const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 bulkInquiryContainer.innerHTML = `
                     <div class="contact-section">
+                        <p>For Bulk Order Query</p>
                         <a href="${whatsappLink}" class="whatsapp-button" target="_blank">
                             <img src="${whatsappIconURL}" class="whatsapp-icon" alt="WhatsApp">
                             <span>Chat with us on WhatsApp</span>
