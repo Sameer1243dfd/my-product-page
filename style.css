@@ -91,7 +91,8 @@ body {
     transform: translateY(-2px);
 }
 .whatsapp-icon {
-    width: 24px;
-    height: 24px;
+    /* --- THE FIX IS HERE: Increased size from 24px to 28px --- */
+    width: 28px;
+    height: 28px;
     margin-right: 10px;
 }
