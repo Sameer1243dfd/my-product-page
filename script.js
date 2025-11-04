@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- YOUR GOOGLE SHEET URL ---
     const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCBq0sGvaMLJI-dylG7325ZFZ4cx6zC0ud4hrbIAbflYy4J7I5wpO_sDkIvmu1cziVbjyM5u_Nk5Yv/pub?output=csv';
     
-    // --- Getting HTML containers ---
     const productInfoContainer = document.getElementById('product-info-container');
     const pincodeContainer = document.getElementById('pincode-section-container');
     const storesContainer = document.getElementById('stores-container');
@@ -53,18 +52,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     storesContainer.innerHTML = `<div class="stores-list"><h2>Also available on:</h2>${standardStores.map(store => createStoreLink(store, store.price === bestPrice)).join('')}</div>`;
                 }
 
-                // --- NEW: Render the Bulk Inquiry Button with the new design ---
+                // --- NEW: Render the WhatsApp Contact Section ---
                 const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
                 const productNameForMessage = encodeURIComponent(product.productName);
                 const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
                 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${prefilledMessage}`;
-                const whatsappIconURL = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg'; // Green WhatsApp Icon
+                // Using a standard, high-quality SVG for the icon
+                const whatsappIconURL = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg';
 
                 bulkInquiryContainer.innerHTML = `
-                    <div class="bulk-inquiry-section">
-                        <a href="${whatsappLink}" class="bulk-inquiry-button" target="_blank">
-                            <img src="${whatsappIconURL}" class="whatsapp-icon-in-button" alt="WhatsApp">
-                            <span>Chat with us for Bulk Inquiry</span>
+                    <div class="contact-section">
+                        <h3>WhatsApp</h3>
+                        <p>For Bulk Order Query</p>
+                        <a href="${whatsappLink}" class="whatsapp-button" target="_blank">
+                            <img src="${whatsappIconURL}" class="whatsapp-icon" alt="WhatsApp">
+                            <span>Chat with us on WhatsApp</span>
                         </a>
                     </div>
                 `;
