@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const productInfoContainer = document.getElementById('product-info-container');
     const pincodeContainer = document.getElementById('pincode-section-container');
     const storesContainer = document.getElementById('stores-container');
-    // NEW: Get the container for the bulk button
     const bulkInquiryContainer = document.getElementById('bulk-inquiry-container');
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -27,9 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const product = allProducts.find(p => p.productID === productIDFromURL);
 
             if (product) {
-                // --- If we found the product, build the page ---
-                
-                // 1. Render the main image and title
+                // 1. Render Product Header
                 productInfoContainer.innerHTML = `
                     <div class="product-header">
                         <img src="${product.imageURL}" alt="${product.productName}">
@@ -37,15 +34,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
 
-                // ... (The marketplaces, standardStores, instantStores, and pincode logic is EXACTLY the same as before)
                 const marketplaces = [
                     { name: 'Amazon', link: product.amazonLink, price: parseFloat(product.amazonPrice), type: 'standard', color: 'dark' },
                     { name: 'Flipkart', link: product.flipkartLink, price: parseFloat(product.flipkartPrice), type: 'standard', color: 'dark' },
                     { name: 'Zepto', link: product.zeptoLink, price: parseFloat(product.zeptoPrice), type: 'instant', color: 'blue' },
                     { name: 'Blinkit', link: product.blinkitLink, price: parseFloat(product.blinkitPrice), type: 'instant', color: 'dark' }
                 ].filter(store => store.link && !isNaN(store.price));
+
                 const standardStores = marketplaces.filter(s => s.type === 'standard');
                 const instantStores = marketplaces.filter(s => s.type === 'instant');
+
+                // 2. Render Pincode Checker (if applicable)
                 if (instantStores.length > 0) {
                     pincodeContainer.innerHTML = `
                         <div class="pincode-checker">
@@ -67,6 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 }
+
+                // 3. Render Standard Stores
                 if (standardStores.length > 0) {
                     let bestPrice = Math.min(...standardStores.map(s => s.price));
                     storesContainer.innerHTML = `
@@ -77,11 +78,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                 }
 
-                // --- NEW: Render the Bulk Inquiry Button ---
-                // CRITICAL: You must change the phone number and product name here!
-                const whatsappNumber = '91XXXXXXXXXX'; // Replace with your WhatsApp number
-                const productNameForMessage = encodeURIComponent(product.productName); // Encodes the product name for the URL
-                const prefilledMessage = `Hello, I would like to inquire about bulk pricing for the product: ${productNameForMessage}.`;
+                // 4. Render the Bulk Inquiry Button
+                const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
+                const productNameForMessage = encodeURIComponent(product.productName);
+                const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
 
                 bulkInquiryContainer.innerHTML = `
                     <div class="bulk-inquiry-section">
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// The createStoreLink and csvToObjects functions are UNCHANGED.
+// This createStoreLink function is for the ROW-BASED layout you like.
 function createStoreLink(store, isBestPrice) {
     const logos = {
         'amazon': 'https://www.dropbox.com/scl/fi/o2fycxwfcynwvswmae1hn/Amazon.png?rlkey=w22zgjc3t4eorbp9k2xaau8om&raw=1',
@@ -113,8 +113,9 @@ function createStoreLink(store, isBestPrice) {
     const bestPriceBadge = isBestPrice ? '<div class="best-price-badge">BEST PRICE</div>' : '';
     const bestPriceClass = isBestPrice ? 'best-price' : '';
     const buttonColorClass = store.color === 'blue' ? 'btn-blue' : 'btn-dark';
-    return `<div class="store-link ${bestPriceClass}"><div class="store-info"><img src="${logoUrl}" alt="${store.name} Logo" class="store-logo"><div class="store-name-section"><span class="store-name">${store.name}</span>${bestPriceBadge}</div></div><div class="price-buy-section"><span class="price">₹${store.price.toLocaleString('en-IN')}</span><a href="${store.link}" target="_blank" class="buy-button ${buttonColorClass}">Buy Now →</a></div></div>`;
+    return `<div class="store-link ${bestPriceClass}">${bestPriceBadge}<div class="store-info"><img src="${logoUrl}" alt="${store.name} Logo" class="store-logo"><span class="store-name">${store.name}</span></div><div class="price-buy-section"><span class="price">₹${store.price.toLocaleString('en-IN')}</span><a href="${store.link}" target="_blank" class="buy-button ${buttonColorClass}">Buy Now →</a></div></div>`;
 }
+
 function csvToObjects(csv) {
     const lines = csv.split('\n');
     const headers = lines[0].split(',').map(h => h.trim());
