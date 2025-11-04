@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- YOUR GOOGLE SHEET URL ---
     const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCBq0sGvaMLJI-dylG7325ZFZ4cx6zC0ud4hrbIAbflYy4J7I5wpO_sDkIvmu1cziVbjyM5u_Nk5Yv/pub?output=csv';
     
-    // --- Getting HTML containers ---
     const productInfoContainer = document.getElementById('product-info-container');
     const pincodeContainer = document.getElementById('pincode-section-container');
     const storesContainer = document.getElementById('stores-container');
@@ -26,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const product = allProducts.find(p => p.productID === productIDFromURL);
 
             if (product) {
-                // ... (The first part of the code that renders the product header, stores, etc. is UNCHANGED)
+                // ... (The first part of the code is unchanged)
                 productInfoContainer.innerHTML = `<div class="product-header"><img src="${product.imageURL}" alt="${product.productName}"><h1>${product.productName}</h1></div>`;
                 const marketplaces = [
                     { name: 'Amazon', link: product.amazonLink, price: parseFloat(product.amazonPrice), type: 'standard', color: 'dark' },
@@ -53,11 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     storesContainer.innerHTML = `<div class="stores-list"><h2>Also available on:</h2>${standardStores.map(store => createStoreLink(store, store.price === bestPrice)).join('')}</div>`;
                 }
 
-                // --- UPDATED: The <h3>WhatsApp</h3> title has been removed ---
+                // --- This section now builds the button WITH the icon ---
                 const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
                 const productNameForMessage = encodeURIComponent(product.productName);
                 const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
                 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${prefilledMessage}`;
+                // Using a reliable, high-quality SVG for the icon
                 const whatsappIconURL = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg';
 
                 bulkInquiryContainer.innerHTML = `
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            productContainer.innerHTML = '<h1>Error</h1>';
+            productInfoContainer.innerHTML = '<h1>Error</h1>';
         });
 });
 
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function createStoreLink(store, isBestPrice) {
     const logos = {
         'amazon': 'https://www.dropbox.com/scl/fi/o2fycxwfcynwvswmae1hn/Amazon.png?rlkey=w22zgjc3t4eorbp9k2xaau8om&raw=1',
-        'blinkit': 'https://www.dropbox.com/scl/fi/djkcf42owax1madv7wnif/Blinkit.png?rlkey=uotoh3i916axki7aa2hrubu8y&raw=1',
+        'blinkit': 'https://www.dropbox.com/scl/fi/djkcf42owax1madv7wnif/Blinkit.png?rlkey=uotoh3i9_axki7aa2hrubu8y&raw=1',
         'flipkart': 'https://www.dropbox.com/scl/fi/lmjhlgrfy7fb7p4oajcb7/Flipkart.png?rlkey=e59789wt1q3snvk8llnwryjmg&raw=1',
         'zepto': 'https://www.dropbox.com/scl/fi/63t2x65lt99qjwaudlwp0/Zepto.png?rlkey=jau6a9kfzea9iwdatv0rvta2t&raw=1'
     };
