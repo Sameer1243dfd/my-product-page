@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- YOUR GOOGLE SHEET URL ---
     const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCBq0sGvaMLJI-dylG7325ZFZ4cx6zC0ud4hrbIAbflYy4J7I5wpO_sDkIvmu1cziVbjyM5u_Nk5Yv/pub?output=csv';
     
+    // --- Getting HTML containers ---
     const productInfoContainer = document.getElementById('product-info-container');
     const pincodeContainer = document.getElementById('pincode-section-container');
     const storesContainer = document.getElementById('stores-container');
@@ -52,13 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     storesContainer.innerHTML = `<div class="stores-list"><h2>Also available on:</h2>${standardStores.map(store => createStoreLink(store, store.price === bestPrice)).join('')}</div>`;
                 }
 
-                // --- This section now builds the button WITH the icon ---
+                // --- THIS SECTION NOW USES YOUR CUSTOM WHATSAPP ICON ---
                 const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
                 const productNameForMessage = encodeURIComponent(product.productName);
                 const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
                 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${prefilledMessage}`;
-                // Using a reliable, high-quality SVG for the icon
-                const whatsappIconURL = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg';
+                // --- THE FIX IS HERE: Using your Dropbox link ---
+                const whatsappIconURL = 'https://www.dropbox.com/scl/fi/6kw45618b241gkjwmtdqe/50156552_imresizer.jpg?rlkey=t1w49k65qid7ryqpff4mrpsr0&raw=1';
 
                 bulkInquiryContainer.innerHTML = `
                     <div class="contact-section">
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            productInfoContainer.innerHTML = '<h1>Error</h1>';
+            productContainer.innerHTML = '<h1>Error</h1>';
         });
 });
 
