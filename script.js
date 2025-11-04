@@ -53,13 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     storesContainer.innerHTML = `<div class="stores-list"><h2>Also available on:</h2>${standardStores.map(store => createStoreLink(store, store.price === bestPrice)).join('')}</div>`;
                 }
 
-                // --- THIS SECTION NOW USES YOUR CUSTOM WHATSAPP ICON ---
+                // --- THIS SECTION NOW USES THE CORRECT TRANSPARENT ICON ---
                 const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
                 const productNameForMessage = encodeURIComponent(product.productName);
                 const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
                 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${prefilledMessage}`;
-                // --- THE FIX IS HERE: Using your Dropbox link ---
-                const whatsappIconURL = 'https://www.dropbox.com/scl/fi/6kw45618b241gkjwmtdqe/50156552_imresizer.jpg?rlkey=t1w49k65qid7ryqpff4mrpsr0&raw=1';
+                // --- THE FIX IS HERE: Using a transparent SVG icon ---
+                const whatsappIconURL = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg';
 
                 bulkInquiryContainer.innerHTML = `
                     <div class="contact-section">
