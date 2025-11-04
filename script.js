@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 bulkInquiryContainer.innerHTML = `
                     <div class="contact-section">
-                        <p>For bulk order inquiries</p>
+                        <p>For bulk order inquiries:</p>
                         <a href="${whatsappLink}" class="whatsapp-button" target="_blank">
                             <img src="${whatsappIconURL}" class="whatsapp-icon" alt="WhatsApp">
                             <span>Chat with us on WhatsApp</span>
