@@ -52,18 +52,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     storesContainer.innerHTML = `<div class="stores-list"><h2>Also available on:</h2>${standardStores.map(store => createStoreLink(store, store.price === bestPrice)).join('')}</div>`;
                 }
 
-                // --- NEW: Render the WhatsApp Contact Section ---
+                // --- UPDATED: The title and subtitle have been removed ---
                 const whatsappNumber = '919876543210'; // <<< CRITICAL: CHANGE THIS NUMBER
                 const productNameForMessage = encodeURIComponent(product.productName);
                 const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
                 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${prefilledMessage}`;
-                // Using a standard, high-quality SVG for the icon
                 const whatsappIconURL = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg';
 
                 bulkInquiryContainer.innerHTML = `
                     <div class="contact-section">
-                        <h3>WhatsApp</h3>
-                        <p>For Bulk Order Query</p>
                         <a href="${whatsappLink}" class="whatsapp-button" target="_blank">
                             <img src="${whatsappIconURL}" class="whatsapp-icon" alt="WhatsApp">
                             <span>Chat with us on WhatsApp</span>
@@ -77,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            productInfoContainer.innerHTML = '<h1>Error</h1>';
+            productContainer.innerHTML = '<h1>Error</h1>';
         });
 });
 
