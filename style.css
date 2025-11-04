@@ -1,126 +1,28 @@
-/* --- Global Settings & Mobile-First Design --- */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #1c1e21;
-    padding: 20px;
-}
-
-.product-card {
-    background-color: #ffffff;
-    border-radius: 18px;
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-}
-
-/* --- Product Header --- */
-.product-header {
-    text-align: center;
-    padding: 32px 24px 24px 24px;
-}
-
-.product-header img {
-    max-width: 250px;
-    height: auto;
-    margin-bottom: 20px;
-}
-
-.product-header h1 {
-    font-size: 1.8em;
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-/* --- Pin Code Checker --- */
-.pincode-checker {
-    background-color: #f0f2f5;
-    padding: 20px 24px;
-    border-top: 1px solid #e0e0e0;
-}
-.pincode-checker .header { font-weight: 600; text-align: center; margin-bottom: 16px; }
-.pincode-input-group { display: flex; gap: 10px; }
-#pincode-input { flex-grow: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1em; text-align: center; }
-#pincode-check-btn { background-color: #007bff; color: white; border: none; padding: 0 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-#instant-delivery-options { margin-top: 16px; }
-.availability-message { font-weight: 500; text-align: center; padding-top: 8px; }
-
-/* --- Stores List --- */
-.stores-list {
+/* --- NEW: Bulk Inquiry Section Styles --- */
+.bulk-inquiry-section {
     padding: 24px;
     border-top: 1px solid #e0e0e0;
-}
-.stores-list h2 {
-    font-size: 1.1em;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: #606770;
+    text-align: center;
 }
 
-/* --- FINAL Store Row Design --- */
-.store-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-    position: relative; /* This is needed for the badge positioning */
-}
-.store-link.best-price { 
-    border: 2px solid #28a745; 
-    margin-top: 20px; /* Add space for the badge */
-}
-
-.store-info { display: flex; align-items: center; gap: 10px; }
-.store-logo { width: 28px; height: 28px; object-fit: contain; }
-.store-name { font-weight: 600; font-size: 1.1em; }
-
-.price-buy-section { display: flex; align-items: center; gap: 16px; }
-.price { font-size: 1.2em; font-weight: 600; }
-
-.buy-button {
-    text-decoration: none;
+.bulk-inquiry-button {
+    display: inline-block;
+    background-color: #1a73e8; /* A professional Google blue */
     color: white;
-    padding: 10px 16px;
-    border-radius: 20px;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
     font-weight: 600;
-    white-space: nowrap;
+    font-size: 1.1em;
     transition: background-color 0.2s ease, transform 0.1s ease;
-    /* --- NEW: Removes the blue highlight on click --- */
     -webkit-tap-highlight-color: transparent;
     outline: none;
 }
-.buy-button:active { transform: scale(0.98); }
 
-.btn-blue { background-color: #007bff; }
-.btn-dark { background-color: #343a40; }
-.btn-blue:hover { background-color: #0056b3; }
-.btn-dark:hover { background-color: #000000; }
-
-/* --- NEW: Correct "Best Price" Badge Positioning --- */
-.best-price-badge {
-    background-color: #28a745;
-    color: white;
-    font-size: 0.8em;
-    font-weight: bold;
-    padding: 4px 12px;
-    border-radius: 16px;
-    /* Positioning magic */
-    position: absolute;
-    top: -15px; /* Lifts the badge up */
-    left: 20px; /* Moves it in from the left */
-    display: none; /* Hidden by default */
+.bulk-inquiry-button:hover {
+    background-color: #1765c8; /* A slightly darker blue on hover */
 }
-.store-link.best-price .best-price-badge {
-    display: block; /* Only show it on the best price item */
+
+.bulk-inquiry-button:active {
+    transform: scale(0.98); /* Click animation */
 }

@@ -5,9 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- YOUR GOOGLE SHEET URL ---
     const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCBq0sGvaMLJI-dylG7325ZFZ4cx6zC0ud4hrbIAbflYy4J7I5wpO_sDkIvmu1cziVbjyM5u_Nk5Yv/pub?output=csv';
     
+    // --- Getting HTML containers ---
     const productInfoContainer = document.getElementById('product-info-container');
     const pincodeContainer = document.getElementById('pincode-section-container');
     const storesContainer = document.getElementById('stores-container');
+    // NEW: Get the container for the bulk button
+    const bulkInquiryContainer = document.getElementById('bulk-inquiry-container');
 
     const urlParams = new URLSearchParams(window.location.search);
     const productIDFromURL = urlParams.get('product');
@@ -24,6 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const product = allProducts.find(p => p.productID === productIDFromURL);
 
             if (product) {
+                // --- If we found the product, build the page ---
+                
+                // 1. Render the main image and title
                 productInfoContainer.innerHTML = `
                     <div class="product-header">
                         <img src="${product.imageURL}" alt="${product.productName}">
@@ -31,16 +37,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
 
+                // ... (The marketplaces, standardStores, instantStores, and pincode logic is EXACTLY the same as before)
                 const marketplaces = [
                     { name: 'Amazon', link: product.amazonLink, price: parseFloat(product.amazonPrice), type: 'standard', color: 'dark' },
                     { name: 'Flipkart', link: product.flipkartLink, price: parseFloat(product.flipkartPrice), type: 'standard', color: 'dark' },
                     { name: 'Zepto', link: product.zeptoLink, price: parseFloat(product.zeptoPrice), type: 'instant', color: 'blue' },
                     { name: 'Blinkit', link: product.blinkitLink, price: parseFloat(product.blinkitPrice), type: 'instant', color: 'dark' }
                 ].filter(store => store.link && !isNaN(store.price));
-
                 const standardStores = marketplaces.filter(s => s.type === 'standard');
                 const instantStores = marketplaces.filter(s => s.type === 'instant');
-
                 if (instantStores.length > 0) {
                     pincodeContainer.innerHTML = `
                         <div class="pincode-checker">
@@ -62,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 }
-
                 if (standardStores.length > 0) {
                     let bestPrice = Math.min(...standardStores.map(s => s.price));
                     storesContainer.innerHTML = `
@@ -72,6 +76,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     `;
                 }
+
+                // --- NEW: Render the Bulk Inquiry Button ---
+                // CRITICAL: You must change the phone number and product name here!
+                const whatsappNumber = '91XXXXXXXXXX'; // Replace with your WhatsApp number
+                const productNameForMessage = encodeURIComponent(product.productName); // Encodes the product name for the URL
+                const prefilledMessage = `Hello, I would like to inquire about bulk pricing for the product: ${productNameForMessage}.`;
+
+                bulkInquiryContainer.innerHTML = `
+                    <div class="bulk-inquiry-section">
+                        <a href="https://wa.me/${whatsappNumber}?text=${prefilledMessage}" class="bulk-inquiry-button" target="_blank">
+                            For Bulk Queries
+                        </a>
+                    </div>
+                `;
+
             } else {
                 productInfoContainer.innerHTML = '<h1>Product Not Found</h1>';
             }
@@ -82,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// --- THIS FUNCTION NOW BUILDS THE CORRECT HTML FOR THE NEW CSS ---
+// The createStoreLink and csvToObjects functions are UNCHANGED.
 function createStoreLink(store, isBestPrice) {
     const logos = {
         'amazon': 'https://www.dropbox.com/scl/fi/o2fycxwfcynwvswmae1hn/Amazon.png?rlkey=w22zgjc3t4eorbp9k2xaau8om&raw=1',
@@ -90,29 +109,12 @@ function createStoreLink(store, isBestPrice) {
         'flipkart': 'https://www.dropbox.com/scl/fi/lmjhlgrfy7fb7p4oajcb7/Flipkart.png?rlkey=e59789wt1q3snvk8llnwryjmg&raw=1',
         'zepto': 'https://www.dropbox.com/scl/fi/63t2x65lt99qjwaudlwp0/Zepto.png?rlkey=jau6a9kfzea9iwdatv0rvta2t&raw=1'
     };
-    
-    const logoUrl = logos[store.name.toLowerCase()] || ''; 
+    const logoUrl = logos[store.name.toLowerCase()] || '';
     const bestPriceBadge = isBestPrice ? '<div class="best-price-badge">BEST PRICE</div>' : '';
     const bestPriceClass = isBestPrice ? 'best-price' : '';
     const buttonColorClass = store.color === 'blue' ? 'btn-blue' : 'btn-dark';
-
-    return `
-        <div class="store-link ${bestPriceClass}">
-            <div class="store-info">
-                <img src="${logoUrl}" alt="${store.name} Logo" class="store-logo">
-                <div class="store-name-section">
-                    <span class="store-name">${store.name}</span>
-                    ${bestPriceBadge}
-                </div>
-            </div>
-            <div class="price-buy-section">
-                <span class="price">₹${store.price.toLocaleString('en-IN')}</span>
-                <a href="${store.link}" target="_blank" class="buy-button ${buttonColorClass}">Buy Now →</a>
-            </div>
-        </div>
-    `;
+    return `<div class="store-link ${bestPriceClass}"><div class="store-info"><img src="${logoUrl}" alt="${store.name} Logo" class="store-logo"><div class="store-name-section"><span class="store-name">${store.name}</span>${bestPriceBadge}</div></div><div class="price-buy-section"><span class="price">₹${store.price.toLocaleString('en-IN')}</span><a href="${store.link}" target="_blank" class="buy-button ${buttonColorClass}">Buy Now →</a></div></div>`;
 }
-
 function csvToObjects(csv) {
     const lines = csv.split('\n');
     const headers = lines[0].split(',').map(h => h.trim());
