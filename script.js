@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 // --- THIS SECTION IS NOW UPDATED WITH THE NEW TEXT ---
-                const whatsappNumber = '8356869159'; // <<< CRITICAL: CHANGE THIS NUMBER
+                const whatsappNumber = '9004267838'; // <<< CRITICAL: CHANGE THIS NUMBER
                 const productNameForMessage = encodeURIComponent(product.productName);
                 const prefilledMessage = `Hello, I would like to inquire about bulk pricing for: ${productNameForMessage}.`;
                 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${prefilledMessage}`;
